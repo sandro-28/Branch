@@ -1,0 +1,100 @@
+📂 MASTER CONTEXT : PROJET "BRANCH" (REBOOT)
+Ceci est la documentation de référence absolue pour le développement de "Branch". Oublie toutes les instructions précédentes qui contredisent ce fichier.
+
+1. L'ARCHITECTURE (NON-NÉGOCIABLE)
+Nous construisons un Control Plane (SaaS) pour gérer des bases de données et des déploiements.
+
+Hébergement : VPS Hostinger (Ubuntu 24.04).
+
+Orchestration : Coolify (installé sur le VPS).
+
+Base de Données : Instance Supabase/PostgreSQL hébergée sur le VPS (gérée par Coolify).
+
+Code Source : GitHub (sandro-28/Branch).
+
+Déploiement : Automatique via Webhook (Git Push Main -> Coolify Pull & Build).
+
+⛔ INTERDIT :
+
+Pas de Vercel.
+
+Pas de docker-compose.yml manuel (Coolify gère les conteneurs via Nixpacks).
+
+Pas de base de données SQLite ou locale.
+
+2. STRATÉGIE DE CONNEXION DATABASE (CRITIQUE)
+La base de données a deux adresses selon d'où on lui parle. Tu dois gérer cette dualité.
+
+A. En Local (Sur mon PC / Développement)
+Pour les migrations (drizzle-kit push) et le npm run dev.
+
+Host : coolify.sandro.click
+
+Port Public : 5432  (Ex: 6543, voir Coolify)
+
+User : postgres
+
+Password : rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW
+
+SSL : Obligatoire (?sslmode=require).
+
+B. En Production (Sur le VPS / Déploiement)
+Pour l'application qui tourne dans le conteneur Docker.
+
+Host Interne : postgresql-database-hwksscs8c0sk44sg0s88o8ws
+
+Port Interne : 5432
+
+User : postgres
+
+Password : rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW
+
+SSL : Non requis en interne.
+
+3. VARIABLES D'ENVIRONNEMENT (.env.local)
+Voici le fichier .env.local que tu dois configurer sur mon poste de développement :
+
+Bash
+
+# 1. DATABASE (Connexion Externe pour Dev & Migrations)
+DATABASE_URL="postgres://postgres:rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW@hwksscs8c0sk44sg0s88o8ws:5432/postgres"
+
+# 2. APP URL
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# 3. BETTER AUTH
+BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_SECRET="e66f60d5e1d23c8644baadc83419e59a00e32374f203d7fd77160ffcd1a62125"
+Note : En production (Coolify), je définirai la DATABASE_URL avec l'hôte interne.
+
+4. STACK TECHNIQUE & RÈGLES DE CODE
+Backend & Auth
+Framework : Next.js 15 (App Router).
+
+Auth : Better-Auth.
+
+⚠️ IMPORTANT : Le fichier de route API doit impérativement être : app/api/auth/[...all]/route.ts.
+
+Configurer trustedOrigins pour accepter https://branch.sandro.click.
+
+ORM : Drizzle ORM.
+
+Workflow Git (GitOps)
+Je ne déploie jamais manuellement.
+
+Ton job : Coder -> git add -> git commit -> git push origin main.
+
+Coolify détecte le push et déploie tout seul.
+
+5. INSTRUCTIONS IMMÉDIATES
+Si ce n'est pas fait, initialise le projet maintenant :
+
+npx create-next-app@latest . --typescript --tailwind --eslint --no-src-dir
+
+Installe Drizzle (drizzle-orm, drizzle-kit, postgres) et Better-Auth.
+
+Configure drizzle.config.ts pour utiliser la DATABASE_URL du .env.local.
+
+Lance un npx drizzle-kit push pour vérifier que tu arrives à parler au VPS.
+
+Au travail.

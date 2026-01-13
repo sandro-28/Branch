@@ -1,0 +1,91 @@
+📂 MASTER CONTEXT : PROJET "BRANCH" (REBOOT)
+Ceci est la documentation de référence absolue. Oublie les instructions précédentes contradictoires.
+
+1. VISION & ÉCOSYSTÈME (LE BUT)
+Nous développons "Branch", l'application centrale (Control Plane) de mon infrastructure.
+
+Son Rôle : Branch servira de tableau de bord pour créer et gérer les bases de données de toutes mes futures applications.
+
+L'Écosystème : Mes futures applications (Client Apps) seront elles aussi déployées sur ce même VPS. Branch en sera le "Cerveau" technique.
+
+2. INFRASTRUCTURE & DÉPLOIEMENT
+Serveur : VPS Hostinger (Ubuntu 24.04).
+
+Orchestration : Coolify (gère les conteneurs Docker et le réseau interne).
+
+Base de Données : Instance Supabase/PostgreSQL hébergée sur le VPS.
+
+Méthode de Déploiement : GitOps.
+
+Le code est hébergé sur GitHub : sandro-28/Branch
+
+Tu ne déploies JAMAIS manuellement.
+
+Ton Workflow : Coder -> git push origin main -> Coolify détecte le changement et déploie automatiquement sur le VPS.
+
+⛔ INTERDIT :
+
+Pas de Vercel (On est 100% VPS).
+
+Pas de docker-compose manuel (Coolify s'en charge).
+
+Pas de base de données locale (SQLite, etc.).
+
+3. CONNEXION DATABASE (LA RÈGLE DUALE)
+L'application doit pouvoir se connecter à la base de données dans deux contextes différents :
+
+A. En Local (Sur mon PC / Développement)
+Utilisé pour le npm run dev et les migrations drizzle-kit push.
+
+Host : coolify.sandro.click (Accès via Internet)
+
+Port : 5432 (Le port public ouvert par Coolify, ex: 5432)
+
+User : postgres
+
+Password : rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW
+
+SSL : Obligatoire (?sslmode=require).
+
+B. En Production (Une fois déployé sur le VPS)
+Utilisé par l'application qui tourne dans le Docker.
+
+Host : postgresql-database-hwksscs8c0sk44sg0s88o8ws (Accès via réseau interne Docker)
+
+Port : 5432
+
+Note : Tu n'as pas à gérer ça dans le code, Coolify injectera la bonne variable DATABASE_URL en prod.
+
+4. VARIABLES D'ENVIRONNEMENT LOCALES (.env.local)
+Configure ce fichier sur ma machine pour le développement :
+
+Bash
+
+# Connexion EXTERNE pour travailler depuis mon PC
+DATABASE_URL="postgres://postgres:rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW@hwksscs8c0sk44sg0s88o8ws:5432/postgres"
+
+# URLs locales
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_SECRET="rL66nTjm9n0ClBoU31eOm6KYeWrZ5WrxvX5alCpbzEXGQuviim3Ojuh7sUdnEDFW"
+5. STACK TECHNIQUE
+Framework : Next.js 15 (App Router, TypeScript).
+
+Auth : Better-Auth.
+
+Route API obligatoire : app/api/auth/[...all]/route.ts.
+
+Config trustedOrigins : Doit inclure https://branch.sandro.click.
+
+ORM : Drizzle ORM.
+
+6. PREMIÈRE MISSION
+Si le projet est vide :
+
+Initialise Next.js (npx create-next-app...).
+
+Installe Drizzle & Better-Auth.
+
+Configure la connexion DB avec les infos ci-dessus.
+
+Fais un git push pour valider que le déploiement Coolify fonctionne.

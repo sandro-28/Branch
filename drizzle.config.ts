@@ -1,0 +1,14 @@
+import { config } from "dotenv";
+import { defineConfig } from "drizzle-kit";
+
+// Charger .env.local (Next.js convention)
+config({ path: ".env.local" });
+
+export default defineConfig({
+    out: "./drizzle",
+    schema: "./lib/schema.ts",
+    dialect: "postgresql",
+    dbCredentials: {
+        url: process.env.DATABASE_URL!,
+    },
+});
