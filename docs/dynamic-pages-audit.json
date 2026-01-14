@@ -1,0 +1,26 @@
+[
+    {
+        "path": "app/tables/page.tsx",
+        "dynamic": "force-dynamic"
+    },
+    {
+        "path": "app/projects/[id]/page.tsx",
+        "dynamic": "force-dynamic"
+    },
+    {
+        "path": "app/admin/users/page.tsx",
+        "dynamic": "force-dynamic"
+    },
+    {
+        "path": "app/logs/page.tsx",
+        "dynamic": "force-dynamic"
+    },
+    {
+        "path": "app/api/auth/[...all]/route.ts",
+        "dynamic": "force-dynamic"
+    },
+    {
+        "path": "app/api/projects/route.ts",
+        "dynamic": "force-dynamic"
+    }
+]

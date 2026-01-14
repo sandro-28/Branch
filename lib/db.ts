@@ -18,6 +18,7 @@ export function getDb(): Database {
     const connectionString = process.env.DATABASE_URL;
 
     if (!connectionString) {
+      console.error("❌ DATABASE_URL missing in process.env");
       throw new Error(
         "DATABASE_URL is not defined. Please set it in your .env.local file."
       );

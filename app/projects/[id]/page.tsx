@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getProjectById } from "@/lib/actions/projects";
 import { ProjectDetailClient } from "./project-detail-client";
 
+export const dynamic = "force-dynamic";
+
 interface ProjectPageProps {
     params: Promise<{ id: string }>;
 }
