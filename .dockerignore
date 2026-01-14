@@ -1,0 +1,13 @@
+# Ignore development files
+node_modules
+.next
+.git
+*.md
+docs/
+bmad/
+*.log
+.env*
+!.env.example
+promote-admin.ts
+new env
+new env 2

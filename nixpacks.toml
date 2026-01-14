@@ -1,4 +1,4 @@
-# Nixpacks configuration for Next.js
+# Nixpacks configuration for Next.js 16
 [phases.setup]
 nixPkgs = ["nodejs_22", "npm"]
 
@@ -9,4 +9,4 @@ cmds = ["npm ci"]
 cmds = ["npm run build"]
 
 [start]
-cmd = "npm start"
+cmd = "npm run start"
