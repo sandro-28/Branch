@@ -4,8 +4,7 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
-import { Sidebar } from "@/components/sidebar";
-import { Header } from "@/components/header";
+import { AppShell } from "@/components/app-shell";
 import { Toaster } from "sonner";
 
 const geistSans = Geist({
@@ -40,13 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <div className="flex h-screen bg-background">
-              <Sidebar />
-              <div className="flex flex-1 flex-col overflow-hidden">
-                <Header />
-                <main className="flex-1 overflow-y-auto p-6">{children}</main>
-              </div>
-            </div>
+            <AppShell>{children}</AppShell>
           </QueryProvider>
           <Toaster richColors position="top-right" />
         </ThemeProvider>
@@ -54,3 +47,4 @@ export default function RootLayout({
     </html>
   );
 }
+
