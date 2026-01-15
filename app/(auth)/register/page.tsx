@@ -53,7 +53,8 @@ export default function RegisterPage() {
             if (result.error) {
                 setError(result.error.message || "Erreur lors de l'inscription");
             } else {
-                router.push("/dashboard");
+                // Use window.location for more reliable redirect after auth
+                window.location.href = "/dashboard";
             }
         } catch {
             setError("Une erreur est survenue. Veuillez réessayer.");

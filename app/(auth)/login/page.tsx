@@ -38,7 +38,8 @@ export default function LoginPage() {
             if (result.error) {
                 setError(result.error.message || "Identifiants invalides");
             } else {
-                router.push("/dashboard");
+                // Use window.location for more reliable redirect after auth
+                window.location.href = "/dashboard";
             }
         } catch {
             setError("Une erreur est survenue. Veuillez réessayer.");

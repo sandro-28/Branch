@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Routes publiques (accessibles sans auth)
-const publicRoutes = ["/login", "/register", "/api/auth"];
+const publicRoutes = ["/", "/login", "/register"];
 
 // Routes qui nécessitent une authentification
 const protectedRoutes = [
@@ -22,10 +22,13 @@ const protectedRoutes = [
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
+    // Allow API routes to pass through (they handle their own auth)
+    if (pathname.startsWith("/api/")) {
+        return NextResponse.next();
+    }
+
     // Vérifier si c'est une route publique
-    const isPublicRoute = publicRoutes.some(
-        (route) => pathname === route || pathname.startsWith(route + "/")
-    );
+    const isPublicRoute = publicRoutes.some((route) => pathname === route);
 
     // Vérifier si c'est une route protégée
     const isProtectedRoute = protectedRoutes.some(
@@ -33,7 +36,6 @@ export function middleware(request: NextRequest) {
     );
 
     // Récupérer le token de session depuis les cookies
-    // Better-Auth stocke la session dans un cookie
     const sessionToken = request.cookies.get("better-auth.session_token");
 
     // Si route protégée et pas de session → redirection vers login
